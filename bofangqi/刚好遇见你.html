@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>刚好遇见你</title>
+    <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.css" rel="stylesheet">
+</head>
+<link rel="shortcut icon" href="#" />
+<style>
+    body,
+    html {
+        background: linear-gradient(90deg,
+                rgba(247, 104, 69, 0.2),
+                rgba(247, 164, 10, 0.2),
+                rgba(240, 236, 9, 0.2),
+                rgba(10, 247, 10, 0.2),
+                rgba(14, 213, 248, 0.2),
+                rgba(18, 22, 245, 0.2),
+                rgba(231, 15, 203, 0.2));
+    }
+
+    .container {
+        line-height: 1.8em;
+        color: deeppink;
+        position: relative;
+        margin-top: 70px;
+        margin-left: -5%;
+    }
+
+    .container .line {
+        float: left;
+        margin-left: 0.5em;
+        word-break: break-all;
+        transition: all 0.3s;
+        width: 1em;
+        position: absolute;
+    }
+
+    .active {
+        font-size: 2.8em;
+        line-height: 2.1em;
+        /*color: #6c6;*/
+        font-weight: 300;
+
+    }
+
+    .bg {
+        position: absolute;
+        font-size: 110px;
+        opacity: 0.4;
+        left: 48%;
+        margin-left: -220px;
+        top: 200px;
+        line-height: 1.5em;
+        text-align: center;
+    }
+
+    footer {
+        position: fixed;
+        bottom: 15px;
+        margin-left: 43.5%;
+        width: 100%;
+        color: purple;
+        font-size: 28px;
+    }
+</style>
+
+<body>
+    <div id="app" class="container">
+        <div class="bg">
+            <div>{{name}} </div><small>{{artist}}</small>
+        </div>
+        <audio :src="file" autoplay></audio>
+        <!-- <div class="diff">{{time}} s</div> -->
+        <div class="line" v-for="(item, index) in lines" v-show="currentLine == index"
+            :class="currentLine == index ? currentClass : ''" :style="randomStyle"> {{item.text}}</div>
+        <footer>&copy;江西软件大学--马文斌</footer>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        var vm = new Vue({
+
+            el: "#app",
+            data: {
+                name: '刚好遇见你',
+                artist: '马文斌',
+                file: '../assets/刚好遇见你.mp3',
+                lrc: `
+                        [00:03.50]演唱：马文斌
+                        [00:07.00]类型：中日混唱
+                        [00:11.98]我们哭了
+                        [00:15.13]我们笑着
+                        [00:18.06]我们抬头望天空
+                        [00:21.58]星星还亮着几颗
+                        [00:24.57]我们唱着
+                        [00:27.42]时间的歌
+                        [00:30.38]才懂得相互拥抱
+                        [00:33.77]到底是为了什么
+                        [00:36.84]ただ君に会えた
+                        [00:40.27] 美しい奇迹
+                        [00:43.33]离れたくない
+                        [00:46.50] 花舞い涙雨
+                        [00:49.51]ただ君に会えば 
+                        [00:52.51]10年経てど
+                        [00:55.68]君への思い 
+                        [00:58.29]色褪せないよ
+                        [01:13.62]泣いたり
+                        [01:16.70]笑ったり 
+                        [01:19.71]空见上げたら
+                        [01:23.05]星が瞬き
+                        [01:26.12]歌おう 
+                        [01:29.15]时の歌 
+                        [01:32.06]初めて抱き合
+                        [01:35.32]う意味を知ったよ
+                        [01:38.51]因为我刚好遇见你
+                        [01:41.99]留下足迹才美丽
+                        [01:44.83]风吹花落泪如雨
+                        [01:47.92]因为不想分离
+                        [01:51.05]因为刚好遇见你
+                        [01:54.06]留下十年的期许
+                        [01:57.27]如果再相遇
+                        [01:59.80]我想我会记得你
+                        [02:03.38]因为刚好遇见你
+                        [02:06.39]留下足迹才美丽
+                        [02:09.46]风吹花落泪如雨
+                        [02:12.63]因为不想分离
+                        [02:15.71]因为刚好遇见你
+                        [02:18.79]留下十年的期许
+                        [02:21.81]如果再相遇
+                        [02:24.50]我想我会记得你
+                        [02:30.35]因为我刚好遇见你
+                        [02:34.30]留下足迹才美丽
+                        [02:37.18]风吹花落泪如雨
+                        [02:40.31]因为不想分离
+                        [02:43.34]因为刚好遇见你
+                        [02:46.42]留下十年的期许
+                        [02:49.58]如果再相遇
+                        [02:52.28]我想我会记得你`,
+                lines: [],
+                animates: 'fadeIn'.split(' '),
+                randomAnimate: '',
+                currentLine: 0,
+                randomStyle: {},
+                time: '00:00.00'
+            },
+            watch: {
+                time: function (val) {
+                    var that = this;
+                    var num = parseFloat(val.replace(':', '.')) * 1000
+
+                    that.lines.forEach(function (item, index) {
+                        if (item.time.indexOf(val.substr(0, 7)) === 0) {
+                            that.randomStyle = {
+                                color: `rgba(${50 + randomInt(200)}, ${5 + randomInt(45)}, ${20 + randomInt(200)})`,
+                                left: randomInt(document.body.clientWidth) * 0.1 + 80 + randomInt(1220)  + 'px',
+                                top: 25 + randomInt(30) + 'px'
+                            }
+                            that.randomAnimate = that.animates[parseInt(Math.random() * that.animates.length)]
+                            that.currentLine = index
+                            return false
+                        }
+                    })
+                }
+            },
+            computed: {
+                currentClass: function () {
+                    return 'active animated ' + this.randomAnimate
+                }
+            },
+            methods: {
+                fetch: function () {
+                    this.lines = [];
+
+                    var lines = this.lrc.split("\n");
+                    for (var k in lines) {
+                        var timeMatch = lines[k].match(/\[(\d+:\d+\.\d+)\]/)
+                        this.lines.push({
+                            time: timeMatch ? timeMatch.pop() : '',
+                            text: lines[k].replace(/^.+?\]/, '')
+                        })
+                    }
+                },
+                run: function () {
+                    var that = this
+                    this.fetch()
+                    var startTime = new Date()
+                    var timer = setInterval(function () {
+                        var currentTime = new Date()
+                        var diff = new Date((currentTime - startTime) * 1)
+                        var ms = parseInt(diff.getMilliseconds() / 10);
+                        that.time = `${diff.getMinutes().pad()}:${diff.getSeconds().pad()}.${ms.pad()}`
+                    }, 100)
+                }
+            },
+            created: function () {
+                this.run()
+            }
+        })
+        Number.prototype.pad = function () {
+            var n = this
+            return (n < 10) ? ("0" + n) : n;
+        }
+        function randomInt(n) {
+            return parseInt(Math.random() * n)
+        }
+    </script>
+</body>
+
+</html>

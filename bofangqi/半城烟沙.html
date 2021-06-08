@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>半城烟沙</title>
+    <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.css" rel="stylesheet">
+</head>
+<link rel="shortcut icon" href="#" />
+<style>
+    body,
+    html {
+        background-image: url("../assets/moshi.jpg");
+        background-size: cover !important;
+        -webkit-filter: grayscale(30%);
+    }
+
+    .container {
+        line-height: 1.8em;
+        color: sienna;
+        position: relative;
+        margin-top: 30px;
+        margin-left: -5%;
+    }
+
+    .container .line {
+        float: left;
+        margin-left: 0.5em;
+        word-break: break-all;
+        transition: all 0.3s;
+        width: 1em;
+        position: absolute;
+    }
+
+    .active {
+        font-size: 3.2em;
+        letter-spacing: 16px;
+        font-weight: 500;
+        white-space: nowrap;
+
+    }
+
+    .bg {
+        position: absolute;
+        font-size: 110px;
+        left: 36%;
+        top: 60px;
+        line-height: 1.5em;
+        text-align: center;
+        opacity: 0.8;
+    }
+</style>
+
+<body>
+    <div id="app" class="container">
+        <div class="bg">
+            <div>{{name}} </div>
+        </div>
+        <audio :src="file" autoplay></audio>
+        <!-- <div class="diff">{{time}} s</div> -->
+        <div class="line" v-for="(item, index) in lines" v-show="currentLine == index"
+            :class="currentLine == index ? currentClass : ''" :style="randomStyle"> {{item.text}}</div>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        var vm = new Vue({
+
+            el: "#app",
+            data: {
+                name: '半城烟沙',
+                artist: '许嵩',
+                file: '../assets/半城烟沙.mp3',
+                lrc: `
+                [00:07.10]歌曲：半城烟沙
+                [00:13.66]演唱：许嵩  金沙
+                [00:20.54]有些爱像断线纸鸢
+                [00:23.48]结局悲余手中线
+                [00:28.47]有些恨像是一个圈
+                [00:31.59]冤冤相报不了结
+                [00:36.75]只为了完成一个夙愿
+                [00:40.16]还将付出几多鲜血
+                [00:44.26]忠义之言
+                [00:46.25]自欺欺人的谎言
+                [00:53.60]有些情入苦难回绵
+                [00:56.57]窗间月夕夕成玦
+                [01:01.68]有些仇心藏却无言
+                [01:04.75]腹化风雪为刀剑
+                [01:09.98]只为了完成一个夙愿
+                [01:13.25]荒乱中邪正如何辨
+                [01:17.38]飞沙狼烟
+                [01:19.47]将乱我徒有悲添
+                [01:25.65]半城烟沙 兵临池下
+                [01:29.81]金戈铁马 替谁争天下
+                [01:33.96]一将成 万骨枯
+                [01:36.01]多少白发送走黑发
+                [01:42.01]半城烟沙 随风而下
+                [01:46.35]手中还有 一缕牵挂
+                [01:50.50]只盼归田卸甲
+                [01:52.58]还能捧回你沏的茶
+                [02:16.12]有些情入苦难回绵
+                [02:19.19]窗间月夕夕成玦
+                [02:24.39]有些仇心藏却无言
+                [02:27.57]腹化风雪为刀剑
+                [02:32.70]只为了完成一个夙愿
+                [02:35.99]荒乱中邪正如何辨
+                [02:40.12]飞沙狼烟将乱我
+                [02:43.22]徒有悲添
+                [02:48.37]半城烟沙 兵临池下
+                [02:52.44]金戈铁马 替谁争天下
+                [02:56.73]一将成 万骨枯
+                [02:58.65]多少白发送走黑发
+                [03:04.82]半城烟沙 随风而下
+                [03:09.00]手中还有 一缕牵挂
+                [03:13.28]只盼归田卸甲
+                [03:15.22]还能捧回你沏的茶
+                [03:21.57]半城烟沙 兵临池下
+                [03:25.52]金戈铁马 替谁争天下
+                [03:29.81]一将成 万骨枯
+                [03:31.82]多少白发送走黑发
+                [03:38.04]半城烟沙 血泪落下
+                [03:42.14]残骑裂甲 铺红天涯
+                [03:46.34]转世燕还故榻
+                [03:48.16]为你衔来二月的花    
+                                 `,
+                lines: [],
+                animates: 'fadeIn'.split(' '),
+                randomAnimate: '',
+                currentLine: 0,
+                randomStyle: {},
+                time: '00:00.00'
+            },
+            watch: {
+                time: function (val) {
+                    var that = this;
+                    var num = parseFloat(val.replace(':', '.')) * 1000
+
+                    that.lines.forEach(function (item, index) {
+                        if (item.time.indexOf(val.substr(0, 7)) === 0) {
+                            if (index % 2 == 1) {
+                                that.randomStyle = {
+                                    color: `rgba(${randomInt(30)}, ${200 + randomInt(50)}, ${200 + randomInt(50)})`,
+                                    left: 220 + 'px',
+                                    top: 520 + 'px'
+                                }
+                            }
+                            else {
+                                that.randomStyle = {
+                                    color: `rgba(${randomInt(20)}, ${210 + randomInt(45)}, ${210 + randomInt(45)})`,
+                                    right: 580 + 'px',
+                                    top: 666 + 'px'
+                                }
+                            }
+                            that.randomAnimate = that.animates[parseInt(Math.random() * that.animates.length)]
+                            that.currentLine = index
+                            return false
+                        }
+                    })
+                }
+            },
+            computed: {
+                currentClass: function () {
+                    return 'active animated ' + this.randomAnimate
+                }
+            },
+            methods: {
+                fetch: function () {
+                    this.lines = [];
+
+                    var lines = this.lrc.split("\n");
+                    for (var k in lines) {
+                        var timeMatch = lines[k].match(/\[(\d+:\d+\.\d+)\]/)
+                        this.lines.push({
+                            time: timeMatch ? timeMatch.pop() : '',
+                            text: lines[k].replace(/^.+?\]/, '')
+
+                        })
+                    }
+                },
+                run: function () {
+                    var that = this
+                    this.fetch()
+                    var startTime = new Date()
+                    var timer = setInterval(function () {
+                        var currentTime = new Date()
+                        var diff = new Date((currentTime - startTime) * 1)
+                        var ms = parseInt(diff.getMilliseconds() / 10);
+                        that.time = `${diff.getMinutes().pad()}:${diff.getSeconds().pad()}.${ms.pad()}`
+                    }, 100)
+                }
+            },
+            created: function () {
+                this.run()
+            }
+        })
+        Number.prototype.pad = function () {
+            var n = this
+            return (n < 10) ? ("0" + n) : n;
+        }
+        function randomInt(n) {
+            return parseInt(Math.random() * n)
+        }
+    </script>
+</body>
+
+</html>

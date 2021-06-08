@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初代视频播放器</title>
+    <link rel="shortcut icon" href="#" />
+    <style>
+        body {
+            background-image: url("../assets/tuan.jpg");
+            margin: 0;
+        }
+
+        #title {
+            color: black;
+            font-size: 48px;
+            margin-left: 42.5%;
+            z-index: 10;
+        }
+
+        #name {
+            color: deeppink;
+            font-size: 35px;
+            margin-left: 41%;
+            z-index: 10;
+        }
+
+        video {
+            margin-left: 28%;
+            width: 600px;
+            height: 340px;
+        }
+
+        #btn {
+            margin-left: 30%;
+        }
+
+        button {
+            color: white;
+            background-color: deepskyblue;
+            width: 80px;
+            height: 55px;
+            margin-left: 35px;
+            z-index: 10;
+            border-radius: 45%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="hezi">
+        <h id="title">视频集</h>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div id="juli">
+            <i id="name">逆战
+            </i>
+            <br>
+            <video id="video" src="../assets/逆战.mp4" controls autoplay="true"></video>
+        </div>
+    </div>
+    <br /><br />
+    <div id="btn">
+        <button id="btn1">播放</button>
+        <button id="btn2">暂停</button>
+        <button id="btn3">上个视频</button>
+        <button id="btn4">下个视频</button>
+    </div>
+
+    </div>
+    <script>
+        // 播放
+        btn1.onclick = function () {
+            if (video !== null) {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }
+        }
+
+        // 暂停
+        btn2.onclick = function () {
+            if (video !== null) {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }
+        }
+
+        var music = new Array();
+        music = [
+            "逆战",
+            "神话",
+            "活成我",
+            "第一夫人",
+            "ILoveU",
+            "为了你唱下去",
+            "中华铄金娘",
+            "动物世界"
+        ];
+        var num = 0;
+        btn3.onclick = function () {
+            var name = document.getElementById("name");
+            num = (num + 7) % 8;
+            video.src = "../assets/" + music[num] + ".mp4";
+            name.innerHTML = music[num];
+            video.play();
+        };
+        btn4.onclick = function () {
+            var name = document.getElementById("name");
+            num = (num + 9) % 8;
+            video.src = "../assets/" + music[num] + ".mp4";
+            name.innerHTML = music[num];
+            video.play();
+        };
+        video.addEventListener(
+            "ended",
+            function () {
+                btn4.onclick();
+            },
+            false
+        );
+
+
+        var curIndex = 0;
+        //时间间隔(单位毫秒)，每秒钟显示一张，数组共有3张图片放在img文件夹下
+        var timeInterval = 25000;
+        //定义一个存放照片位置的数组，可以放任意个，在这里放3个
+        var arr = new Array();
+        arr[0] = "../assets/tuan.jpg";
+        arr[1] = "../assets/d.jpg";
+        arr[2] = "../assets/bao.jpg";
+        arr[3] = "../assets/lty.jpg";
+        setInterval(changeImg, timeInterval);
+        function changeImg() {
+            if (curIndex == arr.length - 1) {
+                curIndex = 0;
+            } else {
+                curIndex += 1;
+            }
+
+            //设置body的背景图片
+            document.body.style.backgroundImage = "URL(" + arr[curIndex] + ")";  //显示对应的图片
+        }
+    </script>
+
+</body>
+
+</html>

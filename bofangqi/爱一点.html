@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>爱一点</title>
+    <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.css" rel="stylesheet">
+</head>
+<link rel="shortcut icon" href="#" />
+<style>
+    body,
+    html {
+        background: linear-gradient(90deg,
+                rgba(247, 104, 69, 0.2),
+                rgba(247, 164, 10, 0.2),
+                rgba(240, 236, 9, 0.2),
+                rgba(10, 247, 10, 0.2),
+                rgba(14, 213, 248, 0.2),
+                rgba(18, 22, 245, 0.2),
+                rgba(231, 15, 203, 0.2));
+    }
+
+    .container {
+        line-height: 1.8em;
+        color: deeppink;
+        position: relative;
+        margin-top: 70px;
+        margin-left: -5%;
+    }
+
+    .container .line {
+        float: left;
+        margin-left: 0.5em;
+        word-break: break-all;
+        transition: all 0.3s;
+        width: 1em;
+        position: absolute;
+    }
+
+    .active {
+        font-size: 3.2em;
+        letter-spacing :16px; 
+        font-weight: 300;
+        white-space: nowrap;
+
+    }
+    .bg {
+        position: absolute;
+        font-size: 120px;
+        opacity: 0.4;
+        left: 40%;
+        top: 80px;
+        line-height: 1.5em;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div id="app" class="container">
+        <div class="bg">
+            <div>{{name}} </div>
+        </div>
+        <audio :src="file" autoplay></audio>
+        <!-- <div class="diff">{{time}} s</div> -->
+        <div class="line" v-for="(item, index) in lines" v-show="currentLine == index"
+            :class="currentLine == index ? currentClass : ''" :style="randomStyle"> {{item.text}}</div>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        var vm = new Vue({
+
+            el: "#app",
+            data: {
+                name: '爱一点',
+                artist: '马文斌',
+                file: '../assets/爱一点.mp3',
+                lrc: `
+                        [00:05.00]歌曲：爱一点
+                        [00:08.17]演唱：马文斌           
+                        [00:15.3]原唱:莫艳琳
+                        [00:27.12]风吹动窗吹动叶声响
+                        [00:32.17]梦在游荡去更远地方
+                        [00:37.38]天上的月露出半只脚
+                        [00:42.53]看地上有个人还睡不着
+                        [00:47.95]云遮住光遮住夜更长
+                        [00:53.35]风静静穿过你的头发
+                        [00:58.50]夜闭上双眼不说话
+                        [01:03.65]我知道你在听我怎么讲
+                        [01:08.25]我想说我会爱你多一点点
+                        [01:13.70]一直就在你的耳边
+                        [01:18.99]相信你也爱我有一点点
+                        [01:24.15]只是你一直没发现
+                        [01:29.31]我想说我会爱你多一点点
+                        [01:34.85]一直就在你的耳边
+                        [01:40.09]相信我会爱你永远不变
+                        [01:45.38]知道你一定会发现
+          
+                        [02:12.22]风吹动窗吹动叶声响
+                        [02:17.57]梦在游荡去更远地方
+                        [02:22.88]天上的月露出半只脚
+                        [02:27.92]看地上有个人还睡不着
+                        [02:33.42]云遮住光遮住夜更长
+                        [02:38.65]风静静穿过你的头发
+                        [02:43.86]夜闭上双眼不说话
+                        [02:48.99]我知道你在听我怎么讲
+                        [02:53.64]我想说我会爱你多一点点
+                        [02:59.11]一直就在你的耳边
+                        [03:04.51]相信你也爱我有一点点
+                        [03:09.56]只是你一直没发现
+                        [03:14.72]我想说我会爱你多一点点
+                        [03:20.26]一直就在你的耳边
+                        [03:25.50]相信我会爱你永远不变
+                        [03:30.84]知道你一定会发现
+                        [03:35.79]我想说我会爱你多一点点                      
+                        [03:41.39]一直就在你的耳边                 
+                        [03:46.81]相信我会爱你永远不变          
+                        [03:57.10]知道你一定会发现
+                        [03:52.05]知道你一定会发现              
+                 `,
+                lines: [],
+                animates: 'fadeIn'.split(' '),
+                randomAnimate: '',
+                currentLine: 0,
+                randomStyle: {},
+                time: '00:00.00'
+            },
+            watch: {
+                time: function (val) {
+                    var that = this;
+                    var num = parseFloat(val.replace(':', '.')) * 1000
+
+                    that.lines.forEach(function (item, index) {
+                        if (item.time.indexOf(val.substr(0, 7)) === 0) {
+                            if (index % 2 == 0) {
+                                that.randomStyle = {
+                                    color: `rgba(${50 + randomInt(200)}, ${5 + randomInt(45)}, ${20 + randomInt(200)})`,
+                                    left: 250 + 'px',
+                                    top: 450 + 'px'
+                                }
+                            }
+                            else {
+                                that.randomStyle = {
+                                    color: `rgba(${50 + randomInt(200)}, ${5 + randomInt(45)}, ${20 + randomInt(200)})`,
+                                    right: 680 + 'px',
+                                    top: 550 + 'px'
+                                }
+                            }
+                            that.randomAnimate = that.animates[parseInt(Math.random() * that.animates.length)]
+                            that.currentLine = index
+                            return false
+                        }
+                    })
+                }
+            },
+            computed: {
+                currentClass: function () {
+                    return 'active animated ' + this.randomAnimate
+                }
+            },
+            methods: {
+                fetch: function () {
+                    this.lines = [];
+
+                    var lines = this.lrc.split("\n");
+                    for (var k in lines) {
+                        var timeMatch = lines[k].match(/\[(\d+:\d+\.\d+)\]/)
+                        this.lines.push({
+                            time: timeMatch ? timeMatch.pop() : '',
+                            text: lines[k].replace(/^.+?\]/, '')
+
+                        })
+                    }
+                },
+                run: function () {
+                    var that = this
+                    this.fetch()
+                    var startTime = new Date()
+                    var timer = setInterval(function () {
+                        var currentTime = new Date()
+                        var diff = new Date((currentTime - startTime) * 1)
+                        var ms = parseInt(diff.getMilliseconds() / 10);
+                        that.time = `${diff.getMinutes().pad()}:${diff.getSeconds().pad()}.${ms.pad()}`
+                    }, 100)
+                }
+            },
+            created: function () {
+                this.run()
+            }
+        })
+        Number.prototype.pad = function () {
+            var n = this
+            return (n < 10) ? ("0" + n) : n;
+        }
+        function randomInt(n) {
+            return parseInt(Math.random() * n)
+        }
+    </script>
+</body>
+
+</html>
